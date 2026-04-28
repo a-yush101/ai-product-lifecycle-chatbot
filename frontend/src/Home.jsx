@@ -59,9 +59,9 @@ const STATS = [
   { num: "∞",   label: "Products Supported" },
 ];
 
-export default function Home({ onEnter }) {
+export default function Home({ onEnter, theme, onToggleTheme }) {
   return (
-    <div className="home">
+    <div className="home" data-theme={theme}>
       {/* Ambient glows */}
       <div className="home-glow" />
 
@@ -70,7 +70,13 @@ export default function Home({ onEnter }) {
         <span className="nav-logo">
           Product<em>Life</em> AI
         </span>
-        <span className="nav-badge">INT428 · AI Essentials</span>
+        <div className="nav-right">
+          <span className="nav-badge">INT428 · AI Essentials</span>
+          <button className="nav-theme-btn" onClick={onToggleTheme} title="Toggle theme">
+            <span>{theme === "dark" ? "☀️" : "🌙"}</span>
+            {theme === "dark" ? "Light" : "Dark"}
+          </button>
+        </div>
       </nav>
 
       {/* Hero */}

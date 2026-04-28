@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import "./App.css";
 import Home from "./Home";
 
@@ -79,14 +79,23 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [sidebar, setSidebar] = useState(true);
+  const [theme, setTheme] = useState(() => localStorage.getItem("plc-theme") || "dark");
   const bottom = useRef(null);
   const API = "http://127.0.0.1:5000";
+
+  const toggleTheme = useCallback(() => {
+    setTheme(t => {
+      const next = t === "dark" ? "light" : "dark";
+      localStorage.setItem("plc-theme", next);
+      return next;
+    });
+  }, []);
 
   useEffect(() => {
     bottom.current?.scrollIntoView({ behavior: "smooth" });
   }, [msgs, loading]);
 
-  if (page === "home") return <Home onEnter={() => setPage("chat")} />;
+  if (page === "home") return <Home onEnter={() => setPage("chat")} theme={theme} onToggleTheme={toggleTheme} />;
 
   const send = async (text) => {
     const t = text || input.trim();
@@ -117,7 +126,7 @@ export default function App() {
   };
 
   return (
-    <div className="app">
+    <div className="app" data-theme={theme}>
       <header className="header">
         <div className="header-left">
           <button className="menu-btn" onClick={() => setPage("home")} title="Back to Home">←</button>
@@ -128,6 +137,10 @@ export default function App() {
           <span className="pill pill-market">📈 Lifecycle Analysis</span>
           <span className="pill pill-strategy">📊 Strategic Insights</span>
           <span className="pill pill-forecast">🔮 Lifecycle Forecast</span>
+          <button className="theme-toggle" onClick={toggleTheme} title="Toggle theme">
+            <span className="toggle-icon">{theme === "dark" ? "☀️" : "🌙"}</span>
+            {theme === "dark" ? "Light" : "Dark"}
+          </button>
         </div>
       </header>
 

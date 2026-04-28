@@ -11,6 +11,7 @@
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   position: relative;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* ── AMBIENT GLOWS ──────────────────────── */
@@ -54,8 +55,9 @@
   display: flex; align-items: center; justify-content: space-between;
   padding: 20px 48px;
   border-bottom: 1px solid var(--border);
-  background: rgba(10,12,16,0.7);
+  background: var(--surface);
   backdrop-filter: blur(12px);
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 .nav-logo {
   font-family: 'Playfair Display', serif;
@@ -64,6 +66,12 @@
   letter-spacing: -0.3px;
 }
 .nav-logo em { font-style: italic; color: var(--market); }
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 .nav-badge {
   font-family: 'DM Mono', monospace;
@@ -74,6 +82,27 @@
   border: 1px solid var(--market-border);
   color: var(--market-text);
   letter-spacing: 0.04em;
+}
+
+.nav-theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  padding: 5px 13px;
+  border-radius: 20px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.nav-theme-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+  background: var(--surface3);
 }
 
 /* ── HERO SECTION ────────────────────────── */
@@ -268,7 +297,7 @@
   font-family: 'DM Mono', monospace;
   font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase;
   padding: 3px 9px; border-radius: 20px;
-  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  background: var(--surface2); border: 1px solid var(--border);
   color: var(--text-3);
 }
 
@@ -316,7 +345,7 @@
   text-align: center;
   padding: 60px 24px 80px;
   border-top: 1px solid var(--border);
-  background: linear-gradient(to bottom, transparent, rgba(240,165,0,0.03));
+  background: linear-gradient(to bottom, transparent, var(--market-dim));
 }
 .bottom-cta h2 {
   font-family: 'Playfair Display', serif;
@@ -350,3 +379,63 @@
   .stat-item { border-radius: 10px !important; border: 1px solid var(--border) !important; }
   .stat-item + .stat-item { border-left: 1px solid var(--border) !important; }
 }
+
+/* ── LIGHT MODE OVERRIDES ────────────────── */
+
+/* plc-num: raise opacity so the large watermark number is visible */
+[data-theme="light"] .plc-num {
+  opacity: 0.30;
+}
+
+/* plc-card top-border accent: full opacity on light surface */
+[data-theme="light"] .plc-card::before {
+  opacity: 1;
+}
+
+/* plc-card intro/decline use fixed hex colours — darken them for light mode */
+[data-theme="light"] .plc-card.intro  { --card-accent: #2563eb; }
+[data-theme="light"] .plc-card.decline { --card-accent: #dc2626; }
+
+/* feat-icon: ensure icon borders have proper contrast */
+[data-theme="light"] .feat-icon.market-icon {
+  background: var(--market-dim);
+  border-color: var(--market-border);
+}
+[data-theme="light"] .feat-icon.strategy-icon {
+  background: var(--strategy-dim);
+  border-color: var(--strategy-border);
+}
+[data-theme="light"] .feat-icon.forecast-icon {
+  background: var(--forecast-dim);
+  border-color: var(--forecast-border);
+}
+
+/* btn-secondary: give it a clearly visible border on a light page */
+[data-theme="light"] .btn-secondary {
+  border-color: rgba(30, 40, 100, 0.25);
+  color: var(--text-2);
+}
+[data-theme="light"] .btn-secondary:hover {
+  border-color: rgba(30, 40, 100, 0.45);
+  background: var(--surface3);
+  color: var(--text);
+}
+
+/* btn-primary: adjust shadow colour so it doesn't wash out on light bg */
+[data-theme="light"] .btn-primary {
+  box-shadow: 0 0 24px rgba(184, 110, 0, 0.22);
+}
+[data-theme="light"] .btn-primary:hover {
+  box-shadow: 0 4px 32px rgba(184, 110, 0, 0.35);
+}
+
+/* stat-num: use deeper amber for legibility on white surface */
+[data-theme="light"] .stat-num {
+  color: var(--market-text);
+}
+
+/* stat-item: cleaner border on light surface */
+[data-theme="light"] .stat-item {
+  border-color: var(--border);
+}
+
