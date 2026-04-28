@@ -81,7 +81,7 @@ export default function App() {
   const [sidebar, setSidebar] = useState(true);
   const [theme, setTheme] = useState(() => localStorage.getItem("plc-theme") || "dark");
   const bottom = useRef(null);
-  const API = "http://127.0.0.1:5000";
+  const API = import.meta.env.VITE_API_URL;
 
   const toggleTheme = useCallback(() => {
     setTheme(t => {
