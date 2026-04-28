@@ -1,3 +1,12 @@
+import {
+  TrendingUp,
+  BarChart2,
+  Clock,
+  Sun,
+  Moon,
+  ArrowRight,
+  ChevronDown,
+} from "lucide-react";
 import "./Home.css";
 
 const PLC_CARDS = [
@@ -33,19 +42,19 @@ const PLC_CARDS = [
 
 const FEATURES = [
   {
-    icon: "📈",
+    Icon: TrendingUp,
     iconCls: "market-icon",
     title: "Lifecycle Analysis",
     desc: "Instantly identify which of the 4 PLC stages a product is in — backed by real sales, competition, and profit trend reasoning.",
   },
   {
-    icon: "📊",
+    Icon: BarChart2,
     iconCls: "strategy-icon",
     title: "Strategic Insights",
     desc: "Get concrete, stage-appropriate business strategies: what to invest in, how to price, and what challenge to solve first.",
   },
   {
-    icon: "🔮",
+    Icon: Clock,
     iconCls: "forecast-icon",
     title: "Lifecycle Forecast",
     desc: "Predict where the product is headed next, what risks could accelerate the transition, and what opportunity to act on now.",
@@ -53,10 +62,10 @@ const FEATURES = [
 ];
 
 const STATS = [
-  { num: "4",   label: "PLC Stages" },
-  { num: "3",   label: "Analysis Sections" },
-  { num: "AI",  label: "Powered Engine" },
-  { num: "∞",   label: "Products Supported" },
+  { num: "4",  label: "PLC Stages" },
+  { num: "3",  label: "Analysis Sections" },
+  { num: "AI", label: "Powered Engine" },
+  { num: "∞",  label: "Products Supported" },
 ];
 
 export default function Home({ onEnter, theme, onToggleTheme }) {
@@ -73,7 +82,11 @@ export default function Home({ onEnter, theme, onToggleTheme }) {
         <div className="nav-right">
           <span className="nav-badge">INT428 · AI Essentials</span>
           <button className="nav-theme-btn" onClick={onToggleTheme} title="Toggle theme">
-            <span>{theme === "dark" ? "☀️" : "🌙"}</span>
+            <span>
+              {theme === "dark"
+                ? <Sun size={14} strokeWidth={2} />
+                : <Moon size={14} strokeWidth={2} />}
+            </span>
             {theme === "dark" ? "Light" : "Dark"}
           </button>
         </div>
@@ -101,15 +114,13 @@ export default function Home({ onEnter, theme, onToggleTheme }) {
         <div className="hero-cta-row">
           <button className="btn-primary" onClick={onEnter} id="launch-chatbot-btn">
             Launch Chatbot
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <ArrowRight size={16} strokeWidth={2} />
           </button>
           <button
             className="btn-secondary"
             onClick={() => document.getElementById("plc-section").scrollIntoView({ behavior: "smooth" })}
           >
-            Learn the Model ↓
+            Learn the Model <ChevronDown size={14} strokeWidth={2} style={{ display: "inline", verticalAlign: "middle" }} />
           </button>
         </div>
       </section>
@@ -143,11 +154,13 @@ export default function Home({ onEnter, theme, onToggleTheme }) {
       <section className="features-section">
         <div className="section-label">What the AI gives you</div>
         <div className="features-grid">
-          {FEATURES.map((f) => (
-            <div className="feat-card" key={f.title}>
-              <div className={`feat-icon ${f.iconCls}`}>{f.icon}</div>
-              <div className="feat-title">{f.title}</div>
-              <div className="feat-desc">{f.desc}</div>
+          {FEATURES.map(({ Icon, iconCls, title, desc }) => (
+            <div className="feat-card" key={title}>
+              <div className={`feat-icon ${iconCls}`}>
+                <Icon size={22} strokeWidth={1.8} />
+              </div>
+              <div className="feat-title">{title}</div>
+              <div className="feat-desc">{desc}</div>
             </div>
           ))}
         </div>
@@ -158,7 +171,7 @@ export default function Home({ onEnter, theme, onToggleTheme }) {
         <h2>Ready to analyse a product?</h2>
         <p>Ask about any product — from iPhones to instant noodles.</p>
         <button className="btn-primary" onClick={onEnter} id="bottom-launch-btn">
-          Open Chatbot →
+          Open Chatbot <ArrowRight size={15} strokeWidth={2} />
         </button>
       </div>
 

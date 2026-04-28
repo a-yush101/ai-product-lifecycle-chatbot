@@ -326,9 +326,9 @@
   font-size: 20px;
   margin-bottom: 16px;
 }
-.feat-icon.market-icon   { background: var(--market-dim); border: 1px solid var(--market-border); }
-.feat-icon.strategy-icon { background: var(--strategy-dim); border: 1px solid var(--strategy-border); }
-.feat-icon.forecast-icon { background: var(--forecast-dim); border: 1px solid var(--forecast-border); }
+.feat-icon.market-icon   { background: var(--market-dim); border: 1px solid var(--market-border); color: var(--market-text); }
+.feat-icon.strategy-icon { background: var(--strategy-dim); border: 1px solid var(--strategy-border); color: var(--strategy-text); }
+.feat-icon.forecast-icon { background: var(--forecast-dim); border: 1px solid var(--forecast-border); color: var(--forecast-text); }
 
 .feat-title {
   font-family: 'Inter', sans-serif;
@@ -381,22 +381,17 @@
 }
 
 /* ── LIGHT MODE OVERRIDES ────────────────── */
-
-/* plc-num: raise opacity so the large watermark number is visible */
 [data-theme="light"] .plc-num {
   opacity: 0.30;
 }
 
-/* plc-card top-border accent: full opacity on light surface */
 [data-theme="light"] .plc-card::before {
   opacity: 1;
 }
 
-/* plc-card intro/decline use fixed hex colours — darken them for light mode */
 [data-theme="light"] .plc-card.intro  { --card-accent: #2563eb; }
 [data-theme="light"] .plc-card.decline { --card-accent: #dc2626; }
 
-/* feat-icon: ensure icon borders have proper contrast */
 [data-theme="light"] .feat-icon.market-icon {
   background: var(--market-dim);
   border-color: var(--market-border);
@@ -410,7 +405,6 @@
   border-color: var(--forecast-border);
 }
 
-/* btn-secondary: give it a clearly visible border on a light page */
 [data-theme="light"] .btn-secondary {
   border-color: rgba(30, 40, 100, 0.25);
   color: var(--text-2);
@@ -421,7 +415,6 @@
   color: var(--text);
 }
 
-/* btn-primary: adjust shadow colour so it doesn't wash out on light bg */
 [data-theme="light"] .btn-primary {
   box-shadow: 0 0 24px rgba(184, 110, 0, 0.22);
 }
@@ -429,13 +422,10 @@
   box-shadow: 0 4px 32px rgba(184, 110, 0, 0.35);
 }
 
-/* stat-num: use deeper amber for legibility on white surface */
 [data-theme="light"] .stat-num {
   color: var(--market-text);
 }
 
-/* stat-item: cleaner border on light surface */
 [data-theme="light"] .stat-item {
   border-color: var(--border);
 }
-
