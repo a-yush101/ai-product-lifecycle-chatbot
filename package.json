@@ -1,0 +1,12 @@
+{
+  "name": "product-lifecycle-chatbot",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^4.22.1"
+  }
+}
