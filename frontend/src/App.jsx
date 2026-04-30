@@ -27,25 +27,25 @@ import "./App.css";
 import Home from "./Home";
 
 /* ── Constants ──────────────────────────────────────────────────── */
-const HISTORY_KEY  = "plc-history";
+const HISTORY_KEY = "plc-history";
 const HISTORY_LIMIT = 20;
 
 const PLC_STAGES = [
   { name: "Introduction", desc: "Low sales · High costs · Build awareness" },
-  { name: "Growth",       desc: "Rising sales · New rivals · Expand fast" },
-  { name: "Maturity",     desc: "Peak sales · Fierce competition · Defend" },
-  { name: "Decline",      desc: "Falling sales · Shrinking market · Pivot" },
+  { name: "Growth", desc: "Rising sales · New rivals · Expand fast" },
+  { name: "Maturity", desc: "Peak sales · Fierce competition · Defend" },
+  { name: "Decline", desc: "Falling sales · Shrinking market · Pivot" },
 ];
 
 const PRODUCTS = [
-  { name: "iPhone",          Icon: Smartphone },
-  { name: "Tesla Model 3",   Icon: Car },
-  { name: "ChatGPT",         Icon: Cpu },
-  { name: "Cotton T-Shirt",  Icon: Shirt },
-  { name: "Nokia 3310",      Icon: PhoneCall },
-  { name: "Solar Panel",     Icon: Zap },
+  { name: "iPhone", Icon: Smartphone },
+  { name: "Tesla Model 3", Icon: Car },
+  { name: "ChatGPT", Icon: Cpu },
+  { name: "Cotton T-Shirt", Icon: Shirt },
+  { name: "Nokia 3310", Icon: PhoneCall },
+  { name: "Solar Panel", Icon: Zap },
   { name: "Instant Noodles", Icon: UtensilsCrossed },
-  { name: "Netflix",         Icon: Clapperboard },
+  { name: "Netflix", Icon: Clapperboard },
 ];
 
 const QUICK = [
@@ -82,15 +82,15 @@ function formatDate(ts) {
   const diffDays = Math.floor((now - d) / 86400000);
   if (diffDays === 0) return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   if (diffDays === 1) return "Yesterday";
-  if (diffDays < 7)  return d.toLocaleDateString([], { weekday: "short" });
+  if (diffDays < 7) return d.toLocaleDateString([], { weekday: "short" });
   return d.toLocaleDateString([], { month: "short", day: "numeric" });
 }
 
 /* ── Message parser & formatter ────────────────────────────────── */
 function parseMsg(text) {
-  const lca   = text.match(/📈[\s\S]*?(?=📊|🔮|$)/)?.[0]?.trim() || "";
-  const strat = text.match(/📊[\s\S]*?(?=🔮|$)/)?.[0]?.trim()   || "";
-  const fore  = text.match(/🔮[\s\S]*$/)?.[0]?.trim()            || "";
+  const lca = text.match(/📈[\s\S]*?(?=📊|🔮|$)/)?.[0]?.trim() || "";
+  const strat = text.match(/📊[\s\S]*?(?=🔮|$)/)?.[0]?.trim() || "";
+  const fore = text.match(/🔮[\s\S]*$/)?.[0]?.trim() || "";
   if (!lca && !strat) return { plain: text };
   return { lca, strat, fore };
 }
@@ -140,18 +140,18 @@ function BotMsg({ text }) {
 
 /* ── Main App ───────────────────────────────────────────────────── */
 export default function App() {
-  const [page, setPage]         = useState("home");
-  const [msgs, setMsgs]         = useState([]);
-  const [input, setInput]       = useState("");
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState("");
-  const [sidebar, setSidebar]   = useState(true);
+  const [page, setPage] = useState("home");
+  const [msgs, setMsgs] = useState([]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [sidebar, setSidebar] = useState(true);
   const [activeSession, setActiveSession] = useState(null); // id of loaded session
-  const [history, setHistory]   = useState(loadHistory);
+  const [history, setHistory] = useState(loadHistory);
   const [historyOpen, setHistoryOpen] = useState(true);
-  const [theme, setTheme]       = useState(() => localStorage.getItem("plc-theme") || "dark");
+  const [theme, setTheme] = useState(() => localStorage.getItem("plc-theme") || "dark");
   const bottom = useRef(null);
-  const API = "http://127.0.0.1:5000";
+  const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "" : "http://127.0.0.1:5000");
 
   const toggleTheme = useCallback(() => {
     setTheme(t => {
