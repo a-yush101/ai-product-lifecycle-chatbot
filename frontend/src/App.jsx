@@ -151,7 +151,7 @@ export default function App() {
   const [historyOpen, setHistoryOpen] = useState(true);
   const [theme, setTheme] = useState(() => localStorage.getItem("plc-theme") || "dark");
   const bottom = useRef(null);
-  const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "" : "http://127.0.0.1:5000");
+  const API = import.meta.env.VITE_API_URL || "http://127.0.0.1:5000";
 
   const toggleTheme = useCallback(() => {
     setTheme(t => {
