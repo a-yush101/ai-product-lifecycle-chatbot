@@ -10,8 +10,8 @@ A domain-specific Generative AI chatbot that analyses any product through the le
 - 🏠 **Landing page** — hero section, animated ambient glows, PLC model explainer, and feature overview
 - 💬 **Chat interface** — structured 3-card bot responses (Lifecycle Analysis · Strategic Insights · Lifecycle Forecast)
 - 🌓 **Dark / Light mode** — fully themed UI with smooth transitions, persisted to `localStorage`
-- 📋 **Sidebar** — quick-access sample products and PLC stage reference
-- ⚡ **Quick prompts** — one-click example queries on the welcome screen
+- 📈 **ML Sales Forecasting** — integrated scikit-learn Linear Regression engine to predict sales trends from CSV data or mock scenarios
+- 📊 **Interactive Analytics** — beautiful charts powered by Recharts showing historical vs. forecasted performance
 - 🔒 **Domain-locked AI** — the system prompt strictly enforces business PLC analysis; off-topic queries are politely redirected
 
 ---
@@ -31,8 +31,9 @@ A domain-specific Generative AI chatbot that analyses any product through the le
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend** | React 18 + Vite 5 |
+| **Frontend** | React 18 + Vite 5 + Recharts |
 | **Backend** | Node.js + Express 4 |
+| **ML Engine** | Python 3 + Scikit-Learn + Pandas |
 | **AI API** | [Groq Cloud](https://console.groq.com) — `llama-3.1-8b-instant` |
 | **Styling** | Vanilla CSS (CSS custom properties / variables) |
 | **Fonts** | DM Mono · Playfair Display · Inter (Google Fonts) |
@@ -46,7 +47,10 @@ product-lifecycle-chatbot/
 ├── README.md
 │
 ├── backend/
-│   ├── server.js          ← Express server · Groq API integration · system prompt
+│   ├── server.js          ← Express server · Groq API integration · ML child process
+│   ├── forecast.py        ← Python ML engine (Linear Regression)
+│   ├── requirements.txt   ← Python dependencies
+│   ├── model.pkl          ← Persisted ML model (generated)
 │   ├── .env               ← GROQ_API_KEY (not committed)
 │   ├── .env.example       ← env template
 │   └── package.json
@@ -110,12 +114,15 @@ The system prompt enforces a strict 3-section format. The frontend parses it by 
 
 ### Prerequisites
 - Node.js 18+
+- Python 3.8+
 - A free [Groq API key](https://console.groq.com)
 
 ### Step 1 — Backend
 ```bash
 cd backend
 npm install
+# Install Python dependencies
+pip install -r requirements.txt
 cp .env.example .env
 # Open .env and set: GROQ_API_KEY=gsk_...
 node server.js
@@ -157,6 +164,31 @@ Send a conversation and receive an AI-generated PLC analysis.
   "reply": "📈 LIFECYCLE ANALYSIS\n...\n📊 STRATEGIC INSIGHTS\n...\n🔮 LIFECYCLE FORECAST\n...",
   "model": "llama-3.1-8b-instant",
   "tokens_used": 487
+}
+```
+
+### `POST /api/forecast`
+
+Execute a machine learning forecast based on sales data.
+
+**Request body:**
+```json
+{
+  "productName": "Smartphone X",
+  "data": [
+    {"month": "Jan", "sales": 1200},
+    {"month": "Feb", "sales": 1500}
+  ]
+}
+```
+
+**Response:**
+```json
+{
+  "forecast": [...],
+  "trend": "upward",
+  "growth_rate": 300,
+  "analysis": "Based on the growth trend, the product is in the Growth stage..."
 }
 ```
 
