@@ -950,3 +950,207 @@ body {
   font-size: 14px;
   margin-top: 1px;
 }
+
+/* FORECAST STYLES ADDED TO APP.CSS */
+
+.forecast-card-wrap {
+  width: 100%;
+  max-width: 650px;
+}
+
+.forecast-chart-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.forecast-chart-container {
+  height: 250px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.forecast-metrics {
+  display: flex;
+  gap: 16px;
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.metric {
+  flex: 1;
+}
+
+.metric-label {
+  font-size: 10px;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.metric-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.forecast-action-btn {
+  height: 38px;
+  padding: 0 16px;
+  background: transparent;
+  border: 1px solid var(--market-border);
+  color: var(--market);
+  border-radius: var(--radius);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.forecast-action-btn:hover:not(:disabled) {
+  background: var(--market-dim);
+  border-color: var(--market);
+}
+
+.forecast-action-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* MODAL STYLES */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.modal-header h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.modal-header p {
+  font-size: 12px;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.upload-wrapper input[type="file"] {
+  display: none;
+}
+
+.modal-action-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.modal-action-btn.primary {
+  background: var(--strategy);
+  color: #fff;
+  border: none;
+}
+
+.modal-action-btn.primary:hover {
+  filter: brightness(1.1);
+}
+
+.modal-action-btn.secondary {
+  background: var(--surface2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.modal-action-btn.secondary:hover {
+  border-color: var(--border-hover);
+  background: var(--surface3);
+}
+
+.modal-action-btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modal-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--text-3);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.modal-divider::before,
+.modal-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-divider span {
+  padding: 0 10px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-3);
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.modal-close:hover {
+  color: var(--text);
+}
