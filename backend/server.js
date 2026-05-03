@@ -41,6 +41,12 @@ For each product consider:
 
 ## YOUR RESPONSE FORMAT
 
+FOR INITIAL PRODUCT ANALYSES, you MUST use the following strict format:
+
+🌟 PRODUCT INTRODUCTION
+- Description: [A brief, 1-2 sentence overview of what the product is and its primary value proposition]
+- Target Market: [Who the product is primarily for]
+
 📈 LIFECYCLE ANALYSIS
 - Current Stage: [Introduction / Growth / Maturity / Decline]
 - Sales Trend: [description with supporting reasoning]
@@ -57,7 +63,11 @@ For each product consider:
 - Risk Factors: [2 key things that could accelerate stage transition]
 - Opportunity Window: [the key opportunity to act on right now]
 
-[End with one sharp follow-up question about the product's strategy]
+❓ FOLLOW-UP
+[One sharp follow-up question about the product's strategy]
+
+FOR FOLLOW-UP QUESTIONS (e.g., asking for more details on a specific strategy, clarifying a concept, or answering your follow-up question):
+Respond conversationally and directly to the user's question. Do NOT use the 4-stage emoji format above. Keep your response insightful, concise, and focused on business strategy.
 
 ## RULES
 
@@ -89,12 +99,21 @@ app.post("/api/chat", async (req, res) => {
   }
 
   try {
+    let optimizedMessages = messages;
+    if (messages.length > 6) {
+      // Keep the first 2 messages (initial analysis) and the last 4 messages (recent context)
+      optimizedMessages = [
+        ...messages.slice(0, 2),
+        ...messages.slice(-4)
+      ];
+    }
+
     const chatMessages = [
       {
         role: "system",
         content: SYSTEM_PROMPT,
       },
-      ...messages.map((msg) => ({
+      ...optimizedMessages.map((msg) => ({
         role: msg.role === "assistant" ? "assistant" : "user",
         content: msg.content,
       })),
