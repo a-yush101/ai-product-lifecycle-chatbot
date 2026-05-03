@@ -22,6 +22,7 @@ import {
   Trash2,
   MessageSquare,
   PlusCircle,
+  Package,
 } from "lucide-react";
 import "./App.css";
 import Home from "./Home";
@@ -88,28 +89,40 @@ function formatDate(ts) {
 
 /* ── Message parser & formatter ────────────────────────────────── */
 function parseMsg(text) {
-  const lca = text.match(/📈[\s\S]*?(?=📊|🔮|$)/)?.[0]?.trim() || "";
-  const strat = text.match(/📊[\s\S]*?(?=🔮|$)/)?.[0]?.trim() || "";
-  const fore = text.match(/🔮[\s\S]*$/)?.[0]?.trim() || "";
-  if (!lca && !strat) return { plain: text };
-  return { lca, strat, fore };
+  const intro = text.match(/🌟[\s\S]*?(?=📈|📊|🔮|❓|$)/)?.[0]?.trim() || "";
+  const lca = text.match(/📈[\s\S]*?(?=📊|🔮|❓|$)/)?.[0]?.trim() || "";
+  const strat = text.match(/📊[\s\S]*?(?=🔮|❓|$)/)?.[0]?.trim() || "";
+  const fore = text.match(/🔮[\s\S]*?(?=❓|$)/)?.[0]?.trim() || "";
+  const followup = text.match(/❓[\s\S]*$/)?.[0]?.trim() || "";
+  if (!intro && !lca && !strat) return { plain: text };
+  return { intro, lca, strat, fore, followup };
 }
 
 function fmt(s) {
   return s.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\n/g, "<br/>");
 }
 
-function BotMsg({ text }) {
+function BotMsg({ text, onSend }) {
   const p = parseMsg(text);
   if (p.plain) {
     return (
-      <div className="card plain">
-        <div dangerouslySetInnerHTML={{ __html: fmt(p.plain) }} />
+      <div className="bot-cards">
+        <div className="card plain">
+          <div dangerouslySetInnerHTML={{ __html: fmt(p.plain) }} />
+        </div>
       </div>
     );
   }
   return (
     <div className="bot-cards">
+      {p.intro && (
+        <div className="card intro">
+          <span className="card-label">
+            <Package size={11} strokeWidth={2} /> Product Introduction
+          </span>
+          <div dangerouslySetInnerHTML={{ __html: fmt(p.intro.replace(/^🌟[^\n]*\n?/, "")) }} />
+        </div>
+      )}
       {p.lca && (
         <div className="card market">
           <span className="card-label">
@@ -133,6 +146,15 @@ function BotMsg({ text }) {
           </span>
           <div dangerouslySetInnerHTML={{ __html: fmt(p.fore.replace(/^🔮[^\n]*\n?/, "")) }} />
         </div>
+      )}
+      {p.followup && (
+        <button 
+          className="followup-btn" 
+          onClick={() => onSend(p.followup.replace(/^❓[^\n]*\n?/, "").replace(/\*\*/g, "").trim())}
+        >
+          <span className="followup-icon">❓</span> 
+          <span>{p.followup.replace(/^❓[^\n]*\n?/, "").replace(/\*\*/g, "").trim()}</span>
+        </button>
       )}
     </div>
   );
@@ -417,7 +439,7 @@ export default function App() {
               ) : (
                 <div key={i} className="msg assistant">
                   <div className="avatar"><Bot size={14} strokeWidth={1.8} /></div>
-                  <BotMsg text={m.content} />
+                  <BotMsg text={m.content} onSend={send} />
                 </div>
               )
             )}

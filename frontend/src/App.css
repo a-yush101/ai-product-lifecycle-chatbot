@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:wght@500;600&family=Inter:wght@400;500;600&display=swap');
 
 *,
 *::before,
@@ -16,6 +16,11 @@
   --surface3: #1e2330;
   --border: rgba(255, 255, 255, 0.07);
   --border-hover: rgba(255, 255, 255, 0.14);
+
+  --intro: #10b981;
+  --intro-dim: rgba(16, 185, 129, 0.08);
+  --intro-border: rgba(16, 185, 129, 0.22);
+  --intro-text: #6ee7b7;
 
   --market: #f0a500;
   --market-dim: rgba(240, 165, 0, 0.08);
@@ -47,6 +52,11 @@
   --surface3: #d8dcea;
   --border: rgba(30, 40, 100, 0.14);
   --border-hover: rgba(30, 40, 100, 0.32);
+
+  --intro: #059669;
+  --intro-dim: #e6f6f0;
+  --intro-border: rgba(5, 150, 105, 0.38);
+  --intro-text: #065f46;
 
   --market: #b86e00;
   --market-dim: #fef5e4;
@@ -638,7 +648,8 @@ body {
 /* ── MESSAGES ────────────────────────────── */
 .msg {
   display: flex;
-  gap: 10px;
+  gap: 14px;
+  margin-bottom: 8px;
   animation: msgIn 0.22s ease both;
 }
 
@@ -659,78 +670,99 @@ body {
 }
 
 .avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
+  font-size: 15px;
   align-self: flex-start;
-  margin-top: 1px;
+  margin-top: 2px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.msg.assistant .avatar {
+  background: linear-gradient(135deg, var(--market-dim), var(--strategy-dim));
+  color: var(--market-text);
+  border: 1px solid var(--border);
+}
+
+.msg.user .avatar {
+  background: var(--surface3);
+  color: var(--text-2);
 }
 
 .msg.user .bubble {
-  background: var(--market-dim);
-  border: 1px solid var(--market-border);
-  border-radius: var(--radius-lg);
-  padding: 10px 14px;
-  max-width: 72%;
-  font-size: 13px;
+  background: var(--surface2);
+  border-radius: 18px 18px 4px 18px;
+  padding: 12px 16px;
+  max-width: 60%;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
   color: var(--text);
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 .bot-cards {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  max-width: 85%;
+  gap: 10px;
+  max-width: 60%;
 }
 
 .card {
-  border-radius: var(--radius-lg);
-  padding: 13px 15px;
-  border: 1px solid;
-  font-size: 12.5px;
-  line-height: 1.75;
+  border-radius: 12px;
+  padding: 16px 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.6;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.card.intro {
+  background: var(--intro-dim);
+  border-left: 3px solid var(--intro);
+  color: var(--text);
 }
 
 .card.market {
   background: var(--market-dim);
-  border-color: var(--market-border);
-  color: var(--market-text);
+  border-left: 3px solid var(--market);
+  color: var(--text);
 }
 
 .card.strategy {
   background: var(--strategy-dim);
-  border-color: var(--strategy-border);
-  color: var(--strategy-text);
+  border-left: 3px solid var(--strategy);
+  color: var(--text);
 }
 
 .card.forecast {
   background: var(--forecast-dim);
-  border-color: var(--forecast-border);
-  color: var(--forecast-text);
+  border-left: 3px solid var(--forecast);
+  color: var(--text);
 }
 
 .card.plain {
   background: var(--surface2);
-  border-color: var(--border);
+  border: 1px solid var(--border);
   color: var(--text);
 }
 
 .card-label {
-  font-size: 9px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  opacity: 0.55;
-  margin-bottom: 7px;
+  opacity: 0.9;
+  margin-bottom: 8px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
+  font-weight: 500;
 }
 
 /* ── TYPING ──────────────────────────────── */
@@ -886,4 +918,35 @@ body {
   .chat-area {
     padding: 16px;
   }
+}
+
+/* ── FOLLOW UP ───────────────────────────── */
+.followup-btn {
+  margin-top: 6px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.5;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.followup-btn:hover {
+  background: var(--surface3);
+  border-color: var(--strategy-border);
+  transform: translateY(-1px);
+}
+
+.followup-btn .followup-icon {
+  font-size: 14px;
+  margin-top: 1px;
 }
