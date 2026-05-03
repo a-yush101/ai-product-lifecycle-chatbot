@@ -2,6 +2,8 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const { exec } = require("child_process");
+const path = require("path");
 
 // Uncomment if Node <18
 // const fetch = require("node-fetch");
@@ -167,6 +169,100 @@ app.post("/api/chat", async (req, res) => {
       error: "Failed to connect to Groq: " + err.message,
     });
   }
+});
+
+/* ===============================
+   FORECAST ROUTE
+================================= */
+app.post("/api/forecast", (req, res) => {
+  console.log("📈 Forecast request received");
+  const { data, productName } = req.body;
+  if (!data || !Array.isArray(data)) {
+    return res.status(400).json({ error: "Invalid data array" });
+  }
+
+  const pythonExec = path.join(__dirname, 'venv', 'bin', 'python3');
+  const scriptPath = path.join(__dirname, 'forecast.py');
+  
+  // Stringify and escape JSON for the command line
+  const jsonData = JSON.stringify(data).replace(/"/g, '\\"');
+  
+  const runPython = (cmd) => {
+    return new Promise((resolve, reject) => {
+      exec(cmd, (error, stdout, stderr) => {
+        if (error) {
+          reject({ error, stderr });
+        } else {
+          resolve(stdout);
+        }
+      });
+    });
+  };
+
+  runPython(`"${pythonExec}" "${scriptPath}" "${jsonData}"`)
+    .catch(() => runPython(`python3 "${scriptPath}" "${jsonData}"`))
+    .then(async (stdout) => {
+      let pyResult;
+      try {
+        pyResult = JSON.parse(stdout);
+        if (pyResult.error) {
+          return res.status(500).json({ error: pyResult.error });
+        }
+      } catch (err) {
+        return res.status(500).json({ error: "Failed to parse python output" });
+      }
+
+      const prompt = `You are a Product Lifecycle (PLC) expert and strategic business analyst. We have performed a linear regression forecast for ${productName || 'the product'}. 
+Historical Data: ${JSON.stringify(data)}
+Forecast (Next 3 periods): ${JSON.stringify(pyResult.forecast)}
+Trend: ${pyResult.trend} (Growth rate: ${pyResult.growth_rate})
+
+Based strictly on this data, provide a short, professional analysis (max 3 short paragraphs).
+1. Classify the product into one of the 4 PLC stages (Introduction, Growth, Maturity, or Decline) based on the historical trend and forecast growth rate. Briefly explain your reasoning.
+2. Discuss what these forecasted numbers mean for the business's market position.
+3. Recommend 2 concrete, actionable strategies appropriate for this specific lifecycle stage.
+DO NOT use emojis. Format it clearly using bold headings.`;
+
+      try {
+        console.log("🚀 Sending forecast analysis to Groq...");
+        const groqRes = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${GROQ_API_KEY}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            model: GROQ_MODEL,
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.3,
+            max_tokens: 600,
+          }),
+        });
+
+        const groqData = await groqRes.json();
+        if (!groqRes.ok || groqData.error) {
+          throw new Error(groqData.error?.message || "Groq API request failed");
+        }
+
+        const analysis = groqData.choices?.[0]?.message?.content || "No analysis available.";
+        
+        return res.json({
+          forecastData: pyResult,
+          analysis: analysis
+        });
+
+      } catch (llmErr) {
+        console.error("❌ Groq Error in Forecast:", llmErr);
+        return res.json({
+          forecastData: pyResult,
+          analysis: "LLM analysis failed. Please review the forecast data manually."
+        });
+      }
+    })
+    .catch((err) => {
+      console.error(`exec error:`, err);
+      return res.status(500).json({ error: "Failed to run python script" });
+    });
 });
 
 /* ===============================
